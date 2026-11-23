@@ -363,7 +363,7 @@ Two derived rules, both from the same measurement:
 
 ---
 
-## 9. Evals **[CI]**
+## 9. Evals **[CI: partial]**
 
 A skill without an eval is a hypothesis. Every skill ships `evals/`:
 
