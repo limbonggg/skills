@@ -1,0 +1,51 @@
+# Trigger eval — trace-second-order
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Keep ~60/40 train/validation, marked per row below.
+
+should:
+  # -- train
+  - "and then what happens?"
+  - "what does this actually incentivize?"
+  - "if we make this the default, what changes for everyone else?"
+  - "will teams just game the number?"
+  - "what breaks when we're 10x bigger?"
+  - "what are we locking ourselves into here?"
+  - "what's the catch with adding a cache?"
+  - "is this going to bite us next quarter?"
+  - "who is going to abuse this endpoint?"
+  - "what does this make harder to change later?"
+  - "the alert is noisy, let's just raise the threshold"
+  - "we're adding retries, that should smooth it out"
+  - "we'll deal with the edge case later"
+  # -- validation
+  - "it's a small change — what does it cause downstream"
+  - "what happens to the on-call when this ships?"
+  - "does this create a new failure mode?"
+  - "if we let teams self-serve this, what happens?"
+  - "we fixed the metric but people are still complaining"
+  - "what are the second-order effects?"
+  - "what does this change about who can do what?"
+  - "before we commit, what are we signing up for?"
+  - "is there a hidden cost to this simplification?"
+  - "if we ship this, who pays for it later?"
+
+should_not:
+  # -- train
+  - "which of these two databases should we pick?"          # decision -> make-the-call
+  - "should we rewrite the auth module or patch it?"        # decision -> make-the-call
+  - "is the p95 regression real or a dashboard artifact?"   # premise -> weigh-evidence
+  - "why did the build start failing?"                      # diagnosis -> debug-systematically
+  - "write the failing test for this bug"                   # ordering -> red-green
+  - "will this migration lock the users table?"             # schema -> judge-data
+  - "is this column nullable in the right way?"             # schema -> judge-data
+  - "split this epic into shippable tickets"                # structure -> split-by-frontier
+  - "summarize where we are, I'm out of context"            # context -> manage-context
+  # -- validation
+  - "write the handoff for tomorrow"                        # message -> write-handoff
+  - "should this run keep going or stop?"                   # run boundary -> stop-or-escalate
+  - "did the deploy actually land?"                         # verification -> prove-it
+  - "write the PR description for this diff"                # message -> report-with-evidence
+  - "the framing of the problem is wrong"                   # framing -> frame-the-problem
+  - "dispatch three workers across these files"             # delegation -> dispatch-workers

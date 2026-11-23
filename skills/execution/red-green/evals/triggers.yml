@@ -1,0 +1,42 @@
+# Trigger eval — red-green
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword
+# a miss until it passes; add a held-out query instead.
+
+should:
+  - "fix the login crash, it's just a null check"
+  - "add a --json flag to the CLI"
+  - "implement retry on the upload call"
+  - "can you refactor this function into two"
+  - "there's no test setup in this repo, just patch it"          # val
+  - "I know what's wrong, just change the condition"             # val
+  - "write the fix and we'll add tests later"                    # val
+  - "add validation to the email field"
+  - "rename User to Account across the module"
+  - "the type error is in this file, fix it"
+  - "just delete the old endpoint"
+  - "port this function to Python"
+  - "add a migration for the new column"                         # val
+  - "can you implement this ticket"                              # val
+  - "the test is red, make it green"
+  - "change the timeout from 30s to 60s"
+  - "TDD this one please"
+  - "write the test first for the parser"
+  - "this is a one-line change, don't overthink it"              # val
+  - "hotfix, we need it shipped tonight"                         # val
+  - "add a feature flag around the new path"
+  - "make the retry logic actually retry"                        # val
+
+should_not:
+  - "why is the build failing?"                 # diagnosis -> debug-systematically
+  - "should we even build this feature?"        # val — decision -> make-the-call
+  - "is the deploy done?"                       # claim -> prove-it
+  - "split this epic into tickets"              # val — decomposition -> split-by-frontier
+  - "review this PR for design problems"        # val — lens, not a change
+  - "what does this stack trace mean?"          # explanation, no change
+  - "write the release notes for this branch"   # reporting -> report-with-evidence
+  - "design the schema for the new service"     # val — design before any change
+  - "explain how the auth flow works"           # explanation, no change
+  - "which database should we pick?"            # decision -> make-the-call

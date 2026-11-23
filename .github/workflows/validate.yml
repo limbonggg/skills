@@ -1,0 +1,25 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Self-test the validator
+        run: node scripts/selftest.mjs
+      - name: Validate every skill (warnings are blocking)
+        run: node scripts/validate-skills.mjs --strict
+      - name: Generated index is in sync
+        run: node scripts/inventory.mjs --check

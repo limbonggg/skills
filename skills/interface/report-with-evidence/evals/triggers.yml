@@ -1,0 +1,50 @@
+# Trigger eval — report-with-evidence
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Split is 60/40 train/validation so the description is not overfitted to its own test set.
+# Source each query from how a user actually asks for a report, not from the skill's own wording.
+
+should:
+  # --- train ---------------------------------------------------------------
+  - "what did you find?"
+  - "status?"
+  - "how did it go?"
+  - "write the PR description"
+  - "summarise what changed and whether it works"
+  - "report back when you're done"
+  - "the release note for this version"
+  - "how confident are you?"
+  - "what's still unverified?"
+  - "did the migration go through?"
+  - "post an update in the thread"
+  - "give me the evidence"
+  - "what should I tell the customer?"
+  - "write up the results"
+  - "the subagent finished — what did it do?"
+  # --- validation ----------------------------------------------------------
+  - "what could still be broken?"
+  - "summarise the incident for the postmortem"
+  - "did you actually run it?"
+  - "hand me the numbers, not the narrative"
+  - "what's left open?"
+  - "review this and tell me what breaks"
+  - "write the changelog entry"
+  - "is that confirmed or assumed?"
+  - "walk me through what you ran"
+  - "how much of this is actually tested?"
+
+should_not:
+  # --- train ---------------------------------------------------------------
+  - "why is the build failing?"             # diagnosis -> debug-systematically
+  - "should we ship this?"                  # decision -> make-the-call
+  - "split this epic into tickets"          # decomposition -> split-by-frontier
+  - "write a test for this function"        # authoring -> red-green
+  - "is the module boundary right?"         # design lens -> judge-architecture
+  - "make the header font bigger"           # change request, no claim
+  - "explain how the auth flow works"       # explanation, no claim
+  # --- validation ----------------------------------------------------------
+  - "ask me three questions about the requirements"   # elicitation -> ask-better
+  - "what goes in the handoff doc?"                   # artifact -> write-handoff
+  - "tell them we won't ship this quarter"            # refusal -> disagree-well
+  - "review this for injection risks"                 # security lens -> judge-risk
+  - "is this query fast enough?"                      # performance lens -> judge-performance

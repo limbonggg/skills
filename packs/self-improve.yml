@@ -1,0 +1,17 @@
+id: self-improve
+title: Self Improve
+capability: Your agent stops repeating a correction, because the correction becomes a check.
+when_not: You have not yet been corrected twice on the same thing. One instance is an anecdote; use it as a gotcha, not a standard.
+skills:
+  - skill: learn-from-correction
+    why: classify mechanical vs judgement, then land it where it cannot be forgotten
+  - skill: manage-context
+    why: a lesson that does not survive compaction did not happen
+  - skill: write-handoff
+    why: the next session starts with what this one learned, or it starts over
+  - skill: disagree-well
+    why: a correction you accept reflexively teaches nothing; test it first
+  - skill: prove-it
+    why: "I'll remember that" is not a durable artifact
+  - skill: write-a-skill
+    why: the correction that recurs in a domain becomes a skill — and a skill written as a tutorial is a sediment layer, not a check

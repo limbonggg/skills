@@ -1,0 +1,21 @@
+id: hard-problem
+title: Hard Problem
+capability: Your agent works on a problem whose answer is unknown and whose obvious framing is wrong.
+when_not: The answer is known and the work is large. Use split-by-frontier; ceremony on a known problem is the failure this pack exists to avoid.
+skills:
+  - skill: frame-the-problem
+    why: the first move is deciding what kind of problem this is, not what to do about it
+  - skill: weigh-evidence
+    why: two-hypothesis discipline, IS/IS-NOT bounding, and the reversal test
+  - skill: premortem
+    why: the failure modes are invisible until you write the obituary — do it before the work, not in the retro
+  - skill: debug-systematically
+    why: when the problem is a fault, the answer is a mechanism — reproduce, isolate, then touch the code
+  - skill: make-the-call
+    why: sometimes the correct output is "gather this one fact before deciding", and that is a decision
+  - skill: split-by-frontier
+    why: sub-questions with different epistemic status, not tasks
+  - skill: judge-architecture
+    why: when the problem is structural, the seam is the answer
+  - skill: report-with-evidence
+    why: a conclusion under uncertainty needs its confidence stated, or it is a guess wearing a suit

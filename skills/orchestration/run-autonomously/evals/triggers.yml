@@ -1,0 +1,46 @@
+# Trigger eval — run-autonomously
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+#
+# This skill is user-invoked: in a host that honours `disable-model-invocation`, the model cannot
+# match it and the `should` set is the human's own choice. In a host that still model-matches (or
+# with the suppression shim removed), the queries below are how a user phrases the situation,
+# which is what the description has to route on. Both readings use the same labels.
+# Source every query from how a user actually asks for an unattended run, not from the skill's
+# own vocabulary.
+#
+# The split is recorded for consistency rather than to measure description match, because a
+# user-invoked description is never model-matched (§4).
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  - "run it overnight and I'll look in the morning"  # val
+  - "keep going until it's done, don't stop to ask me"
+  - "I'm going to bed — work through the backlog"
+  - "just churn through the tickets, I don't want to be pinged"  # val
+  - "come back with it finished"
+  - "don't stop for questions for the next few hours"  # val
+  - "set it running and check in when the suite is green"
+  - "resume the run from where it died last night"
+  - "pick up the queue and don't come back until it's empty"  # val
+  - "run unattended, I'll review the diff tomorrow"
+  - "loop on this until the build is green"
+  - "I need this done by morning without me babysitting it"  # val
+  - "keep iterating on the failing tests until they all pass"
+  - "work through the list one at a time and report at the end"
+  - "go autonomous on the migration checklist"  # val
+  - "there's a state file from last night — carry on"
+
+should_not:
+  - "fix this one failing test"                       # single unit, one turn
+  - "should we rewrite this module?"                  # val — decision -> make-the-call
+  - "split this epic into tickets"                    # decomposition -> split-by-frontier
+  - "is it done?"                                     # val — verification -> prove-it
+  - "why is the build failing?"                       # diagnosis -> debug-systematically
+  - "review my PR"                                    # lens work, not a loop
+  - "run the tests"                                   # val — one command, not a run
+  - "write a cron job that runs the script at 2am"    # infrastructure, no agent loop
+  - "deploy this to production now"                   # one gated action, not a run
+  - "keep going until you find the bug"               # val — no known units; frame-the-problem first
+  - "how much would this cost?"                       # budget question -> budget-the-run
+  - "summarise what you did yesterday"                # val — report -> write-handoff

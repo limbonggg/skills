@@ -1,0 +1,47 @@
+# Trigger eval — judge-taste
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  - "does this look right to you?"
+  - "the spacing on this page feels off"
+  - "something about this screen feels cheap"  # val
+  - "make the dashboard feel more premium"
+  - "should this modal animate in?"
+  - "the hover effect feels janky"
+  - "which button should be the primary one?"
+  - "we have three CTAs on the hero and nobody knows what to click"  # val
+  - "review this component before we merge it"
+  - "the form looks cluttered"
+  - "is 500ms too slow for a menu?"  # val
+  - "why does this page look like a bootstrap template?"  # val
+  - "sanity-check this CSS diff"
+  - "the type sizes are all over the place"
+  - "this transition is distracting"  # val
+  - "can you give this a design pass?"
+  - "the empty state feels unfinished"
+  - "the table rows are hard to scan"
+  - "should the success state have a confetti animation?"  # val
+  - "the placeholder text contrast looks weak"  # val
+  - "does this layout have a clear focal point?"  # val
+  - "tighten up the spacing on this settings page"
+  - "the onboarding step puts everything on one screen"  # val
+
+should_not:
+  - "should we build a settings page at all?"                 # decision -> make-the-call
+  - "the app takes four seconds to boot"                      # latency -> judge-performance
+  - "why is the scroll janky on mobile?"                      # frame budget -> judge-performance
+  - "refactor this component into smaller files"              # code shape -> judge-architecture
+  - "design the schema for user preferences"                  # val — data -> judge-data
+  - "review this endpoint for breaking changes"               # val — API surface -> judge-api
+  - "write the release notes for the redesign"                # message -> report-with-evidence
+  - "add a feature flag around the new nav"                   # val — execution -> red-green
+  - "is this screen-reader accessible?"                       # val — semantics -> accessibility audit
+  - "why does the build fail after the CSS change?"           # val — diagnosis -> weigh-evidence
+  - "choose a typeface for the brand"                         # identity, refused by this lens
+  - "write the marketing copy for the landing page"           # copy, not composition
+  - "the server response is slow"                             # backend latency
+  - "set up storybook for these components"                   # tooling, no verdict
+  - "migrate the styles to tailwind"                          # val — migration, not craft

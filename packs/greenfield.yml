@@ -1,0 +1,23 @@
+id: greenfield
+title: Greenfield
+capability: Your agent shapes the thing before it builds it, and refuses to build what it has not shaped.
+when_not: The codebase already exists and the constraint is what is there, not what could be. Use legacy-rescue.
+skills:
+  - skill: frame-the-problem
+    why: decide what kind of problem this is before decomposing it
+  - skill: ask-better
+    why: the requirements do not exist yet and the user has not finished thinking
+  - skill: weigh-evidence
+    why: the assumptions behind the idea are untested and cheap to test now
+  - skill: make-the-call
+    why: platform, language, and shape decisions need a cost and a reversal path
+  - skill: premortem
+    why: a greenfield plan written only for success is a postmortem waiting for a date
+  - skill: judge-architecture
+    why: the seam you draw on day one is the one you refactor on day ninety
+  - skill: judge-api
+    why: the first version of a public surface is the cheapest it will ever be to get right
+  - skill: split-by-frontier
+    why: a first vertical slice that runs beats a horizontal plan that does not
+  - skill: red-green
+    why: the first slice sets the testing habit for everything after it

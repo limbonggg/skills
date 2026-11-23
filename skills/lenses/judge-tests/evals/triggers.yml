@@ -1,0 +1,53 @@
+# Trigger eval — judge-tests
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Queries are written the way a user asks, not the way the skill is worded.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  - "are these tests any good?"
+  - "does this test actually check anything?"
+  - "the tests pass but nobody trusts them"
+  - "we have 90% coverage and bugs still ship"  # val
+  - "review the tests in this PR"
+  - "is this snapshot worth keeping?"
+  - "should I mock the repository here?"
+  - "this test mocks the class it's testing, is that fine?"  # val
+  - "it passes alone but fails in the full suite"
+  - "this test is flaky in CI, can we just retry it?"  # val
+  - "it fails at midnight and nobody knows why"  # val
+  - "we retry this test three times, is that okay?"  # val
+  - "this test broke when I renamed a variable"  # val
+  - "can we delete this test? it never fails"
+  - "the test asserts the log message exactly, is that good?"
+  - "how many assertions should this test have?"
+  - "unit test or integration test for this?"
+  - "the test still passes if I delete the code it tests"  # val
+  - "our tests take 40 minutes, what should we cut?"
+  - "the expected value just recomputes the function, is that a real test?"  # val
+  - "the test database is built from models, not migrations"  # val
+  - "someone added retry: 3 to the flaky suite"  # val
+  - "should we add a snapshot test for this page?"
+  - "the suite was green but the bug still shipped"  # val
+  - "is this property test worth the runtime?"
+  - "does this test kill any mutation?"
+  - "the test asserts the bug, should we keep it?"  # val
+
+should_not:
+  - "write the failing test for this bug first"          # authoring -> red-green
+  - "add a test for the new endpoint"                    # authoring -> red-green
+  - "is the suite green?"                                # completion claim -> prove-it
+  - "did the tests pass on CI?"                          # completion claim -> prove-it
+  - "why did this test fail?"                            # diagnosis -> weigh-evidence
+  - "is this migration safe?"                            # schema -> judge-data
+  - "add an index for the slow query"                    # schema/perf -> judge-data
+  - "the endpoint is slow under load"                    # product latency -> judge-performance
+  - "there's no seam to test this, how should the module be shaped?"  # val — design -> judge-architecture
+  - "review this endpoint for injection"                 # security -> judge-risk
+  - "should we ship with the flaky test quarantined?"    # val — decision -> make-the-call
+  - "write up the test results for the release"          # val — reporting -> report-with-evidence
+  - "hand this test work to the next session"            # val — handoff -> write-handoff
+  - "split the test cleanup into tickets"                # decomposition -> split-by-frontier
+  - "rename the test file to match the module"           # mechanical edit
+  - "explain what a mutation score is"                   # val — explanation, no suite under review
+  - "set up Jest config"                                 # val — configuration, not test quality

@@ -1,0 +1,51 @@
+# Trigger eval — read-before-write
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  - "just change the timeout to 30 seconds"  # val
+  - "rename this field to customer_id"
+  - "make this argument optional"  # val
+  - "who else calls this function?"
+  - "is it safe to change this helper?"
+  - "this is a one-line fix"  # val
+  - "don't break anything"
+  - "it's legacy, nobody knows how it works"  # val
+  - "add a parameter to this method"
+  - "change the return type to a list"  # val
+  - "this function is used everywhere, be careful"
+  - "can I delete this method?"
+  - "swap this library call for the new client"  # val
+  - "why does changing this break the admin page?"
+  - "you edited one file and three tests broke"  # val
+  - "look at this file and fix the bug"
+  - "the field is a string, make it an enum"
+  - "we need to change what this endpoint returns"  # val
+  - "update the validation in the signup handler"
+  - "I don't know what depends on this table"  # val
+  - "the compiler says this signature doesn't match"
+  - "port this function to the new client library"
+  - "change this error to return null instead"  # val
+  - "we're late, just make the change"
+  - "nobody remembers why this line is here"
+  - "this module has no tests, change it carefully"  # val
+
+should_not:
+  - "write a failing test first"                      # val — red-green
+  - "add a test for this function"                    # red-green
+  - "is it working now?"                              # val — prove-it
+  - "should we rewrite this module?"                  # make-the-call
+  - "should this be its own module?"                  # judge-architecture
+  - "split this epic into tickets"                    # split-by-frontier
+  - "why is the build failing?"                       # val — diagnosis -> debug-systematically
+  - "is this migration safe to run?"                  # judge-data
+  - "write a handoff for the next session"            # write-handoff
+  - "summarize where we are"                          # val — manage-context
+  - "review my PR for style"                          # code review, no lens
+  - "explain how the auth flow works"                 # explanation, no edit
+  - "make the header font bigger"                     # val — UI change, judge-taste
+  - "spawn three workers for this"                    # dispatch-workers
+  - "how much will this run cost?"                    # budget-the-run
+  - "are you sure that's the root cause?"             # val — weigh-evidence

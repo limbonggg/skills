@@ -1,0 +1,53 @@
+# Trigger eval — judge-reliability
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. Queries are written the way a user asks, not the
+# way the skill is worded. Boundary rows name the skill that should win instead.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  - "what does the user see if the payment API is down?"
+  - "what happens if this call fails?"
+  - "should we retry this?"
+  - "we added retries, is that enough?"
+  - "there's no timeout on this call, is that a problem?"
+  - "it hangs in prod but works locally"  # val
+  - "we got double charged on a retry, how do we stop that"  # val
+  - "the webhook fired twice and sent two emails"
+  - "the nightly job ran twice last night"
+  - "it failed silently and nobody noticed for three days"  # val
+  - "do we need a dead letter queue for this consumer?"
+  - "is this handler safe to run twice?"
+  - "should this POST be idempotent?"
+  - "the queue is backing up, what do we do"
+  - "this third-party API is flaky, how should we call it"
+  - "review the error handling in this diff"
+  - "what's our timeout on the inventory call?"
+  - "the consumer acks before it writes, is that fine?"  # val
+  - "we return an empty list when the search service fails, is that ok?"  # val
+  - "the health check pings the database, is that right?"  # val
+  - "we serve stale cache when the API is down, is that safe?"  # val
+  - "it's a batch script, does it need a failure contract?"  # val
+  - "how do we make sure nobody is paged at 3am for a blip?"  # val
+  - "we retry three times at every layer, that's fine right?"  # val
+  - "all our retries fire at once and knock the dependency over again when it recovers"  # val
+  - "what happens to in-flight requests when we deploy?"
+  - "the job lost a row when the pod restarted mid-write"  # val
+  - "we need a circuit breaker here or is that overkill?"
+
+should_not:
+  - "why did the payment API fail last night?"          # diagnosis -> weigh-evidence
+  - "is this endpoint fast enough under load?"          # val — budget + measurement -> judge-performance
+  - "p99 went from 80ms to 400ms, profile it"           # measurement -> judge-performance
+  - "can a user read another tenant's invoice?"         # trust boundary -> judge-risk
+  - "is it safe to log the full request body?"          # val — secret in a log -> judge-risk
+  - "should we adopt SQS or Kafka?"                     # product choice -> make-the-call
+  - "is an SLO worth the engineering spend?"            # val — decision -> make-the-call
+  - "is the deploy green?"                              # completion claim -> prove-it
+  - "did the fix work?"                                 # completion claim -> prove-it
+  - "write a test that the retry stops after three tries"  # val — authoring -> red-green
+  - "the agent run died, where did it get to?"          # val — orchestration -> stop-or-escalate
+  - "summarise the incident for the postmortem"         # message -> report-with-evidence
+  - "hand this on-call rotation to the next team"       # val — message -> write-handoff
+  - "should this be its own module?"                    # shape -> judge-architecture
+  - "explain how the retry library works"               # explanation, no change under review
+  - "rename this helper across the repo"                # mechanical, no boundary crossed

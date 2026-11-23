@@ -1,0 +1,46 @@
+# Trigger eval — ask-better
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Keep ~60/40 train/validation, marked per row below: do not reword a miss until it passes; add a
+# held-out query instead.
+
+should:
+  # -- train
+  - "build me a dashboard for the team"
+  - "I'm not sure what I want yet, help me figure it out"
+  - "ask me what you need before you start"
+  - "add auth to the app"
+  - "make the search faster"
+  - "we need some kind of onboarding flow, no idea what it should look like"
+  - "what do you need from me to get going?"
+  - "that's not what I meant — I wanted it for admins, not customers"
+  - "help me think through what this tool should actually do"
+  - "we're starting a new service, I have a rough idea and nothing else"
+  - "can you interview me about the requirements?"
+  - "before you write anything, tell me what you'd be assuming"
+  # -- validation
+  - "I want a CLI for my team but I haven't worked out the details"
+  - "ask me one question at a time, not a list"
+  - "here's a vague idea: a tool that watches my inbox"
+  - "the requirements are in my head, not written down anywhere"
+  - "I have a rough idea for a tool, ask me what it needs"
+  - "don't start until you know what I actually want"
+  - "help me work out what the requirements even are"
+  - "we keep building the wrong thing — pin down what I want first"
+
+should_not:
+  # -- train
+  - "why is the deploy failing?"                          # diagnosis -> weigh-evidence
+  - "is the fix actually deployed?"                       # claim -> prove-it
+  - "break this epic into tickets"                        # structure -> split-by-frontier
+  - "write the handoff for the next session"              # artifact -> write-handoff
+  - "should we rewrite the parser or patch it?"           # the call is the agent's -> make-the-call
+  - "which database, Postgres or SQLite?"                 # two-way call, agent rules and discloses
+  - "what does this stack trace mean?"                    # diagnosis -> weigh-evidence
+  # -- validation
+  - "what's in the package.json scripts?"                 # a lookup, not an interview
+  - "summarise what changed today"                        # report, no decision
+  - "rename this variable to something clearer"           # mechanical edit
+  - "write a failing test for the retry logic"            # authoring -> red-green
+  - "review this PR for bugs"                             # lens -> review

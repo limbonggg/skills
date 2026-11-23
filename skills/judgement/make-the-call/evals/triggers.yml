@@ -1,0 +1,43 @@
+# Trigger eval — make-the-call
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  - "should we rewrite the parser or patch it?"
+  - "do we ship this now or wait for the auth fix?"
+  - "is it worth building an internal tool for this?"
+  - "which one do you recommend?"
+  - "just make the call, I've been going back and forth all week"  # val
+  - "I can't decide between Postgres and SQLite here"  # val
+  - "we need to pick a library and move on"
+  - "can we cut this from the release?"
+  - "is the migration worth it, or do we live with the schema?"  # val
+  - "what would you do if this were your call?"
+  - "go/no-go for Friday?"
+  - "approve or block this PR?"
+  - "should we keep supporting Node 16?"
+  - "should I ask legal before we announce this?"  # val
+  - "the team keeps reopening the caching decision"  # val
+  - "how bad is it if we're wrong about this?"  # val
+  - "is this a one-way door or can we back it out?"  # val
+  - "give me a recommendation, not a list of options"
+  - "delete the legacy endpoint now or leave it for a quarter?"
+  - "spend two days on perf or ship the feature as is?"
+  - "we're at the fork on the auth approach, decide"  # val
+  - "do we eat the cost of the rewrite or keep paying the maintenance tax?"  # val
+
+should_not:
+  - "why is the build failing on CI?"            # diagnosis -> debug-systematically
+  - "is the fix actually deployed?"              # claim -> prove-it
+  - "break this epic into tickets"               # structure -> split-by-frontier
+  - "write the design doc for the new service"   # document -> interface register
+  - "what's the difference between a mutex and a semaphore?"  # val — explanation, no choice
+  - "review this PR for bugs"                    # val — lens -> review
+  - "write a failing test for the retry logic"   # authoring -> red-green
+  - "how do I configure the connection pool?"    # val — how-to, no choice
+  - "summarise what changed today"               # report, no choice
+  - "rename this variable to something clearer"  # mechanical edit
+  - "what does this stack trace mean?"           # val — diagnosis -> weigh-evidence
+  - "add a dark mode toggle to the settings page" # val — change request, no choice

@@ -1,0 +1,50 @@
+# Trigger eval — split-by-frontier
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+#
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  - "break this epic into tickets"
+  - "how do I sequence this work?"  # val
+  - "where do I even start with this?"
+  - "what's the plan for the migration?"  # val
+  - "split this feature into smaller pieces"
+  - "this is too big for one session"  # val
+  - "what's in scope for v1?"
+  - "which of these can we start in parallel?"
+  - "write the tickets for the notifications rework"  # val
+  - "the plan is a mess, can you restructure it?"
+  - "what depends on what here?"
+  - "give me a task breakdown"  # val
+  - "what are we not doing?"
+  - "we keep discovering new work mid-sprint"
+  - "turn this spec into work items"  # val
+  - "I can't tell what's blocked"
+  - "how many tickets is this?"
+  - "draft the implementation plan"  # val
+  - "what do we do first?"
+  - "this roadmap keeps changing"
+  - "slice this into vertical chunks"  # val
+  - "we need a tracer bullet for this"
+  - "what's still unknown before we can build?"
+  - "the tickets are all 'write the schema', 'write the api' — fix them"  # val
+  - "plan this out across a few sessions"
+  - "can we start the second half while the first is in review?"  # val
+
+should_not:
+  - "why is the build failing?"                    # val — reproduce -> debug-systematically
+  - "should we build this at all?"                 # decision -> make-the-call
+  - "what does this error mean?"                   # explanation, no plan
+  - "write the failing test for this function"     # val — authoring -> red-green
+  - "is it deployed yet?"                          # verification -> prove-it
+  - "fix the null check in parser.ts"              # val — execution, not planning
+  - "review this PR"                               # review lens
+  - "make the button animation smoother"           # design taste
+  - "estimate this in story points for the sprint" # val — scheduling; this skill refuses estimates
+  - "explain how the auth flow works"              # explanation, no plan
+  - "rename this variable across the repo"         # val — mechanical edit
+  - "draft a message to the client about the delay" # writing, no structure
+  - "what's the root cause of the flaky test?"     # reproduce -> debug-systematically
+  - "design the database schema for orders"        # val — design -> judge-data

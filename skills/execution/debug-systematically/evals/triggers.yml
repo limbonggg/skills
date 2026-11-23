@@ -1,0 +1,44 @@
+# Trigger eval — debug-systematically
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Boundary cases are labelled with the skill that owns them, so a misroute is visible as a miss.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  - "it crashes when I upload a CSV"
+  - "this endpoint returns 500 every few minutes"  # val
+  - "it worked yesterday and now it doesn't"
+  - "can't reproduce this bug locally"  # val
+  - "the tests pass on my machine and fail in CI"
+  - "there's a weird error in the logs"  # val
+  - "the job hangs and never finishes"
+  - "the deploy fails maybe one in twenty in prod"  # val
+  - "debug this traceback"
+  - "sometimes the worker drops messages"  # val
+  - "the report shows numbers that don't add up"
+  - "only happens with files over 10MB"
+  - "memory climbs until the process dies"  # val
+  - "it's broken in prod but fine locally"
+  - "I've tried three fixes and it's still failing"
+  - "the app freezes when I open settings"  # val
+  - "the container exits with code 137 every few hours"
+  - "the API returns garbage for one tenant"
+  - "one customer's uploads always fail"  # val
+  - "the cron job stopped running last week"
+  - "why is the build failing?"  # val
+
+should_not:
+  - "is the fix deployed yet?"                     # claim about state -> prove-it
+  - "should we fix this or ship the feature?"      # val — choice with a price -> make-the-call
+  - "the test I just wrote is red, make it green"  # planned change, red exists -> red-green
+  - "add a retry to the upload endpoint"           # val — planned change, nothing broken -> red-green
+  - "is the cache hypothesis actually supported?"  # contested claim, verdict -> weigh-evidence
+  - "was this outage caused by the deploy?"        # val — causal claim about the past -> weigh-evidence
+  - "hand this investigation to the on-call engineer"  # message to a person -> write-handoff
+  - "this session is long, summarise what we know" # context management -> manage-context
+  - "explain how the retry logic works"            # val — explanation, nothing broken
+  - "what does ECONNREFUSED mean?"                 # explanation, nothing broken
+  - "make the CLI accept a --verbose flag"         # feature request -> red-green
+  - "review this diff for quality"                 # val — code judgement -> judge-taste
+  - "split this epic into tickets"                 # work structure -> split-by-frontier

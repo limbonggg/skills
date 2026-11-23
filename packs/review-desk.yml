@@ -1,0 +1,31 @@
+id: review-desk
+title: Review Desk
+capability: Your agent reviews someone else's work as a senior engineer would — neither a rubber stamp nor a pedant.
+when_not: You are the author of the change. Use ship-it; a review of your own work is a proofread.
+skills:
+  - skill: judge-architecture
+    why: the shape of the change matters more than its style, and it is the thing authors cannot see
+  - skill: judge-risk
+    why: what the change opens is invisible in a diff read for correctness
+  - skill: judge-performance
+    why: only when the change is on a hot path; a performance note on cold code is noise
+  - skill: judge-data
+    why: only when the diff touches schema or migrations; a data comment on a pure-logic diff is noise
+  - skill: judge-api
+    why: only when the diff touches a surface a client binds to; the break is invisible inside the repo
+  - skill: judge-taste
+    why: only when the diff touches UI; taste notes on backend code are the reviewer having feelings
+  - skill: judge-tests
+    why: a green suite that asserts nothing is the review's most common false comfort
+  - skill: judge-reliability
+    why: the diff that is correct only while the network is perfect is not correct
+  - skill: judge-cost
+    why: only when the diff touches a hot path or a paid API; cost notes on cold code are noise
+  - skill: weigh-evidence
+    why: the PR description's claim about why this is safe needs the same test as any claim
+  - skill: make-the-call
+    why: block, request changes, or approve — with the cost of each named
+  - skill: disagree-well
+    why: the review comment that says "this is wrong" without a falsifiable reason is the failure mode
+  - skill: report-with-evidence
+    why: every finding needs file:line and the behaviour it breaks

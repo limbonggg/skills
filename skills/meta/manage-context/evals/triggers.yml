@@ -1,0 +1,58 @@
+# Trigger eval — manage-context
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+#
+# Source every query from how a user asks for a context boundary, not from the skill's vocabulary.
+# Keep ~60/40 train/validation, marked per row below: the tail of each list is held out, not tuned
+# against.
+
+should:
+  # -- train
+  - "you're running out of context — wrap this up"
+  - "compact before you keep going"
+  - "summarize where we are so we can pick this up tomorrow"
+  - "start a fresh session and continue this work"
+  - "carry this context to whoever picks it up next"
+  - "fork a subagent to crawl the logs and report back"
+  - "the context is getting long — what should we keep?"
+  - "you're repeating yourself, are you losing the thread?"
+  - "we decided this an hour ago and you've forgotten it"
+  - "we're at 85% of the window"
+  - "continue this in a new chat without losing the decisions"
+  - "spin up an agent to search the repo so this thread stays clean"
+  - "write down what matters before the window fills"
+  - "this session is ending — make sure the next one can pick it up"
+  - "you just re-read a file you already read — stop and reset"
+  - "which of these files should I drop from the context?"
+  # -- validation
+  - "we're halfway through the window and the logs are flooding it"
+  - "drop the exploration from the context, keep the decisions"
+  - "you're citing a file we changed an hour ago"
+  - "we're near the token limit — prepare to continue elsewhere"
+  - "summarise the decisions before you compact"
+  - "the subagent's output would flood this thread — isolate it"
+  - "we've lost the thread — reset and keep the decisions"
+  - "you answered from an earlier draft again"
+  - "start the next phase in a clean context"
+  - "the next read is bigger than what's left of the window"
+  - "keep the pointers and drop the rest before we compact"
+
+should_not:
+  # -- train
+  - "write the handoff doc for the next team"            # artifact -> write-handoff
+  - "delegate this one task and give the worker a contract"  # delegation -> dispatch-workers
+  - "run the suite overnight and I'll check in the morning"  # loop -> run-autonomously
+  - "should we keep this feature or cut it?"             # decision -> make-the-call
+  - "is the build green?"                                 # verification -> prove-it
+  - "why is the parser dropping rows?"                    # diagnosis -> weigh-evidence
+  - "split this epic into tickets"                        # structure -> split-by-frontier
+  - "how much has this run cost so far?"                  # budget -> budget-the-run
+  - "stop the run, it's going nowhere"                    # stop -> stop-or-escalate
+  # -- validation
+  - "review my PR"                                        # lens work, not a boundary
+  - "summarize this article for me"                       # content summary, not context
+  - "make the summary shorter"                            # prose edit, not a boundary
+  - "delete the old log files"                            # filesystem cleanup
+  - "what does this function do?"                         # code question
+  - "start a new branch for this work"                    # git operation
+  - "you're out of budget"                                # stop -> stop-or-escalate

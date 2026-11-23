@@ -1,0 +1,19 @@
+{
+  "name": "skills",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A library of agent skills for how to think, decide, and work — with a normative authoring standard and executable CI for it.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "validate": "node scripts/validate-skills.mjs",
+    "validate:strict": "node scripts/validate-skills.mjs --strict",
+    "selftest": "node scripts/selftest.mjs",
+    "inventory": "node scripts/inventory.mjs",
+    "inventory:check": "node scripts/inventory.mjs --check",
+    "test": "node scripts/selftest.mjs && node scripts/validate-skills.mjs --strict && node scripts/inventory.mjs --check"
+  }
+}

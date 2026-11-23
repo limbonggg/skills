@@ -1,0 +1,56 @@
+# Trigger eval — explain-at-level
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Split is 60/40 train/validation so the description is not overfitted to its own test set.
+# Source each query from how a user actually asks for an explanation to be re-pitched,
+# not from the skill's own wording.
+
+should:
+  # --- train ---------------------------------------------------------------
+  - "explain this to the exec team"
+  - "ELI5 how the cache invalidation works"
+  - "write this up for a non-technical audience"
+  - "just the gist — what happened in the outage"
+  - "give me the one-paragraph version"
+  - "go deeper on the retry logic"
+  - "the CEO is asking why the migration slipped"
+  - "explain it like I'm new to the team"
+  - "too much jargon in that design doc"
+  - "pitch this to the board on Thursday"
+  - "summarise this design for the product manager"
+  - "explain this to the customer in plain English"
+  - "my manager wants to know why this takes three weeks"
+  - "explain the architecture to a new hire"
+  - "same thing but shorter"
+  - "that's too detailed — just give me the decision"
+  # --- validation ----------------------------------------------------------
+  - "walk a junior through how the scheduler picks a job"
+  - "how would you explain this to someone who doesn't code"
+  - "the answer was right but nobody in the room understood it"
+  - "reword this for the incident review"
+  - "make this explanation land with finance"
+  - "explain the trade-off in business terms"
+  - "they keep asking the same question — what am I getting wrong"
+  - "condense the design doc into an exec summary"
+  - "explain the failure to the on-call engineer, who knows the code"
+  - "one line for the changelog, for users who never saw the internals"
+
+should_not:
+  # --- train ---------------------------------------------------------------
+  - "is this actually true, or does it just sound right?"      # evidence -> weigh-evidence
+  - "did the tests pass?"                                       # claim -> prove-it
+  - "write the PR description with what you ran"                # report -> report-with-evidence
+  - "should we ship it this week?"                              # decision -> make-the-call
+  - "write a handoff for the next session"                      # boundary -> write-handoff
+  - "summarize where we are so I can compact"                   # context -> manage-context
+  - "is this design good?"                                      # lens -> judge-architecture
+  - "review this for security holes"                            # lens -> judge-risk
+  # --- validation ----------------------------------------------------------
+  - "ask me what I actually need before you build it"           # elicitation -> ask-better
+  - "tell them I disagree with the approach"                    # verdict -> disagree-well
+  - "split this epic into vertical slices"                      # decomposition -> split-by-frontier
+  - "translate this doc into French"                            # literal translation, no altitude
+  - "fix the typos in this doc"                                 # copy-edit, no reader model
+  - "how does TCP handle packet loss?"                          # general knowledge, no listener
+  - "which of these two libraries should we use?"               # decision -> make-the-call
+  - "did the deploy actually go through?"                       # observation -> prove-it

@@ -1,0 +1,57 @@
+# Trigger eval — write-a-skill
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword
+# a miss until it passes; add a held-out query instead.
+# Every should_not names the skill that should fire instead — a near-miss with no route is a
+# description bug in the other skill, not a false positive in this one.
+
+should:
+  # -- train
+  - "write a skill for this"
+  - "turn this into a skill"
+  - "add a skill to the library"
+  - "skillify this correction"
+  - "make this reusable across sessions"
+  - "save this as a skill"
+  - "the skill never fires"
+  - "the agent keeps ignoring the skill"
+  - "this skill didn't change anything"
+  - "why didn't the skill load"
+  - "the description isn't triggering"
+  - "review this skill before I merge it"
+  - "is this skill any good"
+  # -- validation
+  - "does this skill meet the standard"
+  - "write the evals for this skill"
+  - "our skill reads like a tutorial, fix it"
+  - "the agent keeps doing this every session, can we encode it"
+  - "make a senior-reviewer skill"
+  - "capture this as a skill"
+  - "update the skill so it fires on how I actually ask"
+  - "I want a skill that makes the agent stop writing 'should work'"
+  - "the skill fires but the agent still gets it wrong"
+  - "our skills overlap — should this be one skill or two"
+  - "this skill is 800 lines — split it or cut it"
+  - "should this be a skill or a gotcha line"
+
+should_not:
+  # -- train
+  - "the user corrected me, where does the rule go"       # -> learn-from-correction
+  - "I've been corrected on this twice, where do I write it down"  # -> learn-from-correction
+  - "add a lint rule for this"                            # -> learn-from-correction, mechanical half
+  - "is this claim actually true"                         # -> weigh-evidence
+  - "why is the build failing"                            # -> debug-systematically
+  - "compact the session before we run out"               # -> manage-context
+  - "what does this skill cost per turn"                  # -> manage-context
+  - "write a handoff for tomorrow"                        # -> write-handoff
+  - "delegate this slice to a subagent"                   # -> dispatch-workers
+  # -- validation
+  - "review this schema change"                           # -> judge-data
+  - "write a failing test for this bug"                   # -> red-green
+  - "should we ship this feature"                         # -> make-the-call
+  - "explain how skills are loaded"                       # explanation, no artifact
+  - "install this skill into my repo"                     # installation, not authoring
+  - "write docs for this library"                         # documentation, not a skill
+  - "change the system prompt to be terser"               # agent config, not a skill

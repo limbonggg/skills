@@ -1,0 +1,52 @@
+# Trigger eval — judge-data
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  - "add a column for the customer's tax id"
+  - "should this be a JSON column or its own table?"
+  - "we want to store flexible attributes per product"
+  - "is it safe to drop the legacy status column?"
+  - "is this schema right for multi-currency orders?"  # val
+  - "we need line items per order — new table?"
+  - "can we rename the email column to email_address?"
+  - "backfill the new field for existing rows"
+  - "make this column NOT NULL"
+  - "add an index on created_at"
+  - "deleting a user takes 40 seconds and the cascade is huge"  # val
+  - "we're adding soft deletes, where does deleted_at go?"  # val
+  - "review this migration before I merge it"
+  - "the status column has values nobody expects, can we constrain it"  # val
+  - "how do we migrate from integer ids to uuids?"  # val
+  - "should amount be numeric or float?"
+  - "do we need a join table for tags?"
+  - "we're splitting the users table, is that safe?"  # val
+  - "add a unique constraint on tenant and slug"
+  - "how do I add a foreign key without locking the table?"  # val
+  - "is it okay to store timestamps without a timezone?"  # val
+  - "we keep a copy of the order total on the invoice, is that fine?"  # val
+  - "design the tables for the billing feature"
+  - "can we just delete the old column?"
+  - "the down migration drops the table, is that acceptable?"  # val
+  - "will this ALTER TABLE lock writes?"
+  - "every table has nullable everything, is that a problem?"  # val
+
+should_not:
+  - "which database should we use, Postgres or DynamoDB?"   # val — decision -> make-the-call
+  - "should we even build the reporting feature?"            # decision -> make-the-call
+  - "add a migration for the new column"                     # executing under test-first -> red-green
+  - "is the migration applied?"                              # verification -> prove-it
+  - "write a failing test for the migration"                 # authoring -> red-green
+  - "split this schema work into tickets"                    # decomposition -> split-by-frontier
+  - "review this schema for multi-tenant access patterns"    # val — trust boundary -> judge-risk
+  - "review this API's error format"                         # surface -> judge-api
+  - "the chart re-renders on every keystroke"                # val — frame budget -> judge-performance
+  - "the endpoint p99 doubled after the deploy"              # val — latency, not shape -> judge-performance
+  - "review this PR for SQL injection"                       # security -> judge-risk
+  - "explain how our auth flow works"                        # explanation, no change
+  - "what does this SQL error mean?"                         # explanation, no change
+  - "rename UserService to AccountService everywhere"        # val — mechanical edit
+  - "draft the release notes for the schema change"          # val — reporting -> report-with-evidence
+  - "set up the ORM connection pool"                         # configuration, not schema

@@ -1,0 +1,42 @@
+# Trigger eval — write-handoff
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+#
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  - "write a handoff before you compact"  # val
+  - "hand this off to the next session"
+  - "I'm running out of context, save where we are"  # val
+  - "pick this up tomorrow, leave yourself notes"
+  - "brief whoever takes over this branch"  # val
+  - "the run stopped at iteration 12, write where it got to"
+  - "leave a status file so I can resume"
+  - "I'm switching machines, catch me up"  # val
+  - "we hit the budget, hand it off"
+  - "another agent is taking over, give it the context"  # val
+  - "wrap up and tell the next person what to do"
+  - "what should the next session know?"
+  - "my laptop is about to die, dump the state"  # val
+  - "document the decisions we made so nobody relitigates them"
+  - "write the handoff notes for the on-call engineer"
+  - "park this and leave a resume point"  # val
+  - "you're being reassigned, brief your replacement"
+  - "give me a state file a colleague can pick up"
+  - "before the session ends, write down what we decided and what is next"  # val
+  - "the worker died mid-unit, leave a note for the retry"
+
+should_not:
+  - "write the release notes for this version"        # claim to readers -> report-with-evidence
+  - "summarize this PR for the reviewer"              # val — evidence report -> report-with-evidence
+  - "explain what you changed and why"                # single-turn explanation, no successor
+  - "what's the status of the build?"                 # val — verification -> prove-it
+  - "should we keep going or stop for the night?"     # ruling -> stop-or-escalate
+  - "what did we decide about the caching layer?"     # answer from the session, transcript in hand
+  - "write the README for this package"               # val — documentation for users, not a successor
+  - "give me a recap of this conversation"            # summary with no reader to resume it
+  - "split the remaining work into tickets"           # val — structure -> split-by-frontier
+  - "commit the work and push"                        # repository change -> execution
+  - "is the migration applied?"                       # verification -> prove-it
+  - "review this diff for security holes"             # val — lens -> judge-risk

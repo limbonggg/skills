@@ -1,0 +1,25 @@
+id: autonomous-run
+title: Autonomous Run
+capability: Your agent works for hours unattended and stops for the right reasons.
+when_not: The task is under an hour or the plan is still changing shape. An unattended run amplifies a bad plan; use greenfield or hard-problem first.
+skills:
+  - skill: frame-the-problem
+    why: an unattended run cannot recover from a wrong framing, so the framing is the last human gate
+  - skill: split-by-frontier
+    why: the frontier is what the loop iterates over; a bad graph is a bad run
+  - skill: run-autonomously
+    why: the loop contract itself — disk as memory, fresh context, byte-exact completion
+  - skill: dispatch-workers
+    why: bounded returns are what keep a coordinator's context alive past hour two
+  - skill: parallel-safely
+    why: concurrency belongs in git, not in the agent's head
+  - skill: budget-the-run
+    why: an unbounded run is an unbounded bill, and the failure is silent
+  - skill: judge-cost
+    why: an unattended run prices its own retries — or it finds out at the invoice
+  - skill: stop-or-escalate
+    why: the four-stop boundary is the difference between autonomy and drift
+  - skill: prove-it
+    why: a worker that claims success is a claim, not evidence
+  - skill: manage-context
+    why: compaction is the point where a run forgets its own rules

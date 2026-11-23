@@ -1,0 +1,51 @@
+# Trigger eval — judge-api
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  - "add an endpoint to fetch a customer's invoices"
+  - "can we rename this field in the response or does that break people?"
+  - "is it a breaking change if I add a new value to the status enum?"
+  - "the mobile app already ships against v1, can we just change it?"  # val
+  - "we need to bump the API version for this, right?"
+  - "should this be PATCH or PUT?"
+  - "our errors come back as 200 with an error field, is that ok?"  # val
+  - "how do we deprecate the legacy orders endpoint?"
+  - "review this OpenAPI diff before I merge it"
+  - "the frontend wants a new field on the order object"
+  - "we're adding pagination to /events — cursor or offset?"  # val
+  - "can I make this query parameter required now?"  # val
+  - "the partner integration broke when we added a response field"  # val
+  - "is returning 404 for a permission error fine?"
+  - "should this be one endpoint or three?"
+  - "we're changing order ids from integer to uuid"
+  - "add idempotency to the payment endpoint"
+  - "do we need a v2 for this or can it be additive?"
+  - "this proto field is unused, can we delete it?"  # val
+  - "the app crashes when the API returns an enum value it doesn't know"  # val
+  - "we want to rename /getUser to something RESTful"  # val
+  - "review the error contract for this new service"
+  - "how long do we keep v1 alive?"  # val
+  - "should this endpoint return a total count?"
+  - "our SDKs are generated from the spec — will this break them?"  # val
+  - "is adding an optional field to the request body safe?"
+  - "the response shape changed and a customer is asking why"  # val
+  - "should the version go in the path or a header?"
+
+should_not:
+  - "add an index on user_id to speed up the query"          # val — -> judge-performance
+  - "is this migration reversible if it fails halfway?"       # val — -> judge-data
+  - "does this endpoint have an authz hole?"                  # -> judge-risk
+  - "should we build the invoicing feature at all?"           # -> make-the-call
+  - "why is the endpoint returning 500 in prod right now?"    # val — -> weigh-evidence
+  - "refactor this handler into smaller functions"            # -> judge-architecture
+  - "write tests for the new route"                           # -> red-green
+  - "document the API in the README"
+  - "make this endpoint 20ms faster"                          # -> judge-performance
+  - "rename this internal function to something clearer"      # val — mechanical edit
+  - "set up the CI pipeline for the service"
+  - "design the database schema for orders"                   # val — -> judge-data
+  - "what's the difference between REST and GraphQL?"         # val — explanation, no surface
+  - "review this PR for readability"

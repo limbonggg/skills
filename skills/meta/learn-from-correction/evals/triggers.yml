@@ -1,0 +1,66 @@
+# Trigger eval — learn-from-correction
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases a correction, not from the skill's own wording.
+#
+# Split: rows under `# -- validation` are the held-out split (~40%); rows under `# -- train` shaped
+# the description. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  # -- train
+  - "no, that's not what I meant"
+  - "I said no mocks"
+  - "again? I already told you this"
+  - "you changed the wrong file"
+  - "why did you touch the migrations?"
+  - "stop adding docstrings to everything"
+  - "that's the second time you've done that"
+  - "no, use the helper that already exists"
+  - "don't rewrite it, just fix the bug"
+  - "I asked for a plan before you started editing"
+  - "you didn't run the tests again"
+  - "we don't do it that way in this repo"
+  - "the reviewer said the same thing I said yesterday"
+  - "nope — tabs, not spaces"
+  - "you keep ignoring the conventions file"
+  - "this is the third time this has broken"
+  - "can you make sure this doesn't happen again?"
+  - "not like that — look at how the other module does it"
+  - "I had to fix your change by hand"
+  - "the linter caught something you should have caught"
+  - "add a rule so you don't do this next time"
+  - "remember for next time: no console.log"
+  # -- validation
+  - "we agreed on error codes, not exceptions, for this API"
+  - "you renamed a public export without asking"
+  - "why is there a new dependency in here?"
+  - "that comment is wrong and now it's in the codebase"
+  - "stop guessing at the schema — read the migration"
+  - "you added a migration when I asked for a backfill script"
+  - "that's not the file I meant — I said the router"
+  - "we use pnpm here, not npm"
+  - "why did you delete the fixture?"
+  - "I said one commit per concern, not one big one"
+  - "don't touch generated files, they get rebuilt"
+  - "you keep putting business logic in the controller"
+  - "the test you wrote passes without the fix"
+  - "stop reformatting lines I didn't ask you to change"
+  - "you skipped the type check again"
+
+should_not:
+  # -- train
+  - "add a retry to the upload call"            # new work -> frame-the-problem
+  - "should we even support IE here?"           # decision -> make-the-call
+  - "is this architecture right?"               # judgement -> judge-architecture
+  - "I think you're wrong about the cause"      # claim testing -> weigh-evidence
+  - "write the failing test first"              # execution discipline -> red-green
+  - "did you actually run it?"                  # verification -> prove-it
+  - "use staging for this run"                  # one-off instruction, no lesson
+  - "don't push until I say so"                 # one-off instruction, no lesson
+  # -- validation
+  - "explain why the build failed"              # diagnosis, nothing rejected
+  - "make the error message friendlier"         # change request, nothing rejected
+  - "review this PR"                            # review-desk lens
+  - "summarise what we did today"               # report -> report-with-evidence
+  - "how do I configure the linter?"            # how-to question
+  - "what's the idiomatic way to do this in Go?" # reference question

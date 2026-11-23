@@ -1,0 +1,42 @@
+# Trigger eval — frame-the-problem
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# `# val` marks the held-out validation split (~40%); the rest are the train split.
+
+should:
+  - "we need to add a cache in front of the read API"          # names a solution, not a problem
+  - "figure out why checkout got slow"                          # symptom, cause unknown
+  - "should we even be storing this at all?"                   # questions the frame itself
+  - "research whether we can drop the Redis dependency"          # val
+  - "I don't know what kind of problem this actually is"       # val
+  - "how would you approach getting off the legacy billing service?"  # val
+  - "the importer falls over on large files and nobody knows why"   # val — symptom without a frame
+  - "we want to improve onboarding conversion, break it down"     # val — asked for a breakdown of an unframed goal
+  - "honestly I'm not sure what the actual problem is yet"
+  - "is this a bug or is it working as intended?"
+  - "look at this ticket and tell me what kind of work it is"     # val
+  - "the ticket says migrate the build to Vite, what's involved"
+  - "we have a hunch the database is the bottleneck but that's all it is"
+  - "what should we even be measuring here?"                      # val
+  - "two weeks on this, three attempts, nothing has narrowed"
+  - "help me think this through before we plan anything"
+  - "the PM wants a plan by Friday for something nobody has scoped"  # val
+  - "our test suite takes 20 minutes and we don't know where the time goes"
+  - "how do we decide whether multi-tenancy is even the right shape"
+  - "the vendor says it's their platform, we think it's our config"   # val
+  - "we keep patching this thing and it keeps coming back"
+
+should_not:
+  - "break this spec into tickets"                       # shape known -> split-by-frontier
+  - "add a retry with backoff to the payments client"    # one unambiguous instruction
+  - "is the deploy finished?"                            # claim -> prove-it
+  - "write a test for the CSV parser"                    # authoring -> red-green
+  - "review this PR for security issues"                 # lens -> security review
+  - "here are the two benchmark runs, which do we go with?"  # options framed -> make-the-call
+  - "explain how the auth flow works"                    # explanation, no work to shape
+  - "how long will this take?"                           # estimation method, not framing
+  - "rename UserService to AccountService everywhere"    # mechanical
+  - "is the claim in this blog post about our API accurate?"  # claim -> weigh-evidence
+  - "review this schema for multi-tenant access patterns"     # lens -> judge-architecture
+  - "summarise what changed in this release"             # reporting, no problem to type

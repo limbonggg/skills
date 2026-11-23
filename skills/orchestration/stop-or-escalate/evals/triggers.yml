@@ -1,0 +1,53 @@
+# Trigger eval — stop-or-escalate
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+#
+# This skill is model-invoked, so the description is the whole routing surface: every `should` query
+# below is how a person phrases a run that is ending, or asking whether it should. The `should_not`
+# set is the harder half — most of these are the *start* of a run, a single claim, or a decision, and
+# they are the near-misses the description has to exclude by name.
+# Source every query from how a user actually asks, not from the skill's own vocabulary.
+#
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword
+# a miss until it passes; add a held-out query instead.
+
+should:
+  - "should I stop here or keep going?"
+  - "call it — where did it get to?"
+  - "it's been running for six hours, is it stuck?"  # val
+  - "the agent stopped and didn't say why"
+  - "did the run finish?"
+  - "it says done but I don't believe it"  # val
+  - "we're blocked on the staging credentials"  # val
+  - "we've burned $40 of a $20 budget, pull the plug"
+  - "the plan was wrong — kill the run"  # val
+  - "wrap it up and tell me what's left"
+  - "it died overnight and I don't know where it got to"  # val
+  - "one of the workers came back blocked, what now?"
+  - "is it stuck or just slow — how do I tell?"  # val
+  - "it keeps retrying the same thing"  # val
+  - "we're out of time on this, hand it over"
+  - "the assumption about the batch endpoint turned out false — stop?"  # val
+  - "write down why the run ended"
+  - "if it's not done by midnight, stop and leave a note"
+  - "the loop is at its last iteration and the suite is still red"
+  - "is this run finished or just quiet?"  # val
+
+should_not:
+  - "run it overnight and I'll look in the morning"        # starting a run -> run-autonomously
+  - "keep going until the suite is green"                  # continuing a run -> run-autonomously
+  - "resume from where it died last night"  # val — resumption -> run-autonomously
+  - "how much can this run cost?"                          # budget policy -> budget-the-run
+  - "how many tokens have we used?"  # val — a meter reading, no boundary
+  - "should we abandon this feature?"                      # a priced decision -> make-the-call
+  - "which database should we use?"  # val — a choice -> make-the-call
+  - "write a handoff for the next session"                 # context boundary -> write-handoff
+  - "is it actually working?"                              # a claim -> prove-it
+  - "why is the build failing?"                            # reproduce -> debug-systematically
+  - "the tests are flaky"  # val — test quality -> judge-tests
+  - "split this epic into units"                           # structure -> split-by-frontier
+  - "fix the failing test"                                 # the work itself -> red-green
+  - "review this PR"                                       # a lens, not a run
+  - "stop the dev server"  # val — a literal command, not a run
+  - "summarise the last two hours"                         # a report -> write-handoff
+  - "deploy this to production now"  # val — one gated action, not a boundary

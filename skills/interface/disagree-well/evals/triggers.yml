@@ -1,0 +1,46 @@
+# Trigger eval — disagree-well
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Split: rows under `# -- validation` are the held-out split (~40%); rows under `# -- train` shaped
+# the description. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  # -- train
+  - "this is the right approach, isn't it?"
+  - "am I missing anything here?"
+  - "any concerns with this plan?"
+  - "does this make sense to you?"
+  - "I've fixed the race condition — we're good, right?"
+  - "sounds reasonable?"
+  - "you agree with this diagnosis?"
+  - "quick sanity check on this migration plan"
+  - "is this estimate realistic?"
+  - "tell me honestly, is this a bad idea?"
+  - "is this PR good to merge?"
+  - "should I be worried about this?"
+  # -- validation
+  - "I think we should rewrite the parser — thoughts?"
+  - "here's my design, poke holes in it"
+  - "we're ready to ship, right?"
+  - "I'm confident this is correct — back me up"
+  - "do you see any problems with this?"
+  - "great catch, wasn't it?"
+  - "no, that's not how the parser works — you're wrong"
+  - "you've got the retry logic backwards — it never backs off"
+
+should_not:
+  # -- train
+  - "why is the build failing?"                              # diagnosis -> debug-systematically
+  - "should we rewrite this module or patch it?"             # choice -> make-the-call
+  - "run the tests and tell me if they pass"                 # observation -> prove-it
+  - "write up what you found for the PR"                     # report shape -> report-with-evidence
+  - "how should I structure this service?"                   # design -> judge-architecture
+  - "split this epic into tickets"                           # decomposition -> split-by-frontier
+  - "ask me what I actually need from this feature"          # elicitation -> ask-better
+  # -- validation
+  - "what does this stack trace mean?"                       # explanation, no verdict sought
+  - "make the header font bigger"                            # change request, no verdict sought
+  - "fix the null check in parser.ts"                        # execution
+  - "summarise this design doc"                              # no stance requested
+  - "what is the difference between a mutex and a semaphore?"  # knowledge question

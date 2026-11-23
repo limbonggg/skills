@@ -1,0 +1,48 @@
+# Trigger eval — judge-performance
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the lens's own wording.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  - "the checkout page takes three seconds to load"
+  - "the list janks when I scroll"
+  - "p99 doubled after the deploy"
+  - "this endpoint is slow, can you make it faster?"
+  - "is this going to be a hot path?"  # val
+  - "should we put a cache in front of the user lookup?"
+  - "memory keeps growing until the pod gets killed"
+  - "we allocate a string per row in this loop, is that bad?"  # val
+  - "review this PR, it's on the request path"  # val
+  - "our cold start is four seconds"
+  - "the mobile page scores 30 on Lighthouse"
+  - "can we batch these queries?"
+  - "this query does a full scan on two million rows"  # val
+  - "should I optimise this before we ship?"
+  - "it's O(n²) but n is small — do we care?"  # val
+  - "the animation stutters on older phones"
+  - "we're at 200 ms p50 and the SLA is 300 ms p99, are we fine?"  # val
+  - "why is this loop the top frame in the profile?"  # val
+  - "would a worker thread fix this?"
+  - "the CSV export takes 40 minutes now"
+  - "we added a pool and it got slower"  # val
+  - "does this change make it slower?"  # val
+  - "the frame drops every time the marker moves"  # val
+  - "how many queries does this page fire?"
+
+should_not:
+  - "why is the build failing on CI?"                  # val — diagnosis -> debug-systematically
+  - "break this epic into tickets"                     # structure -> split-by-frontier
+  - "should we rewrite the parser or patch it?"        # choice -> make-the-call
+  - "is the fix actually deployed?"                    # claim -> prove-it
+  - "review this PR for injection risk"                # val — security -> judge-risk
+  - "rename this variable to something clearer"        # mechanical edit
+  - "add a dark mode toggle to settings"               # change request, no budget
+  - "what's the difference between a mutex and a semaphore?"  # val — explanation
+  - "write a failing test for the retry logic"         # authoring -> red-green
+  - "should we migrate to Postgres 16?"                # choice -> make-the-call
+  - "summarise today's incidents"                      # report, no judgement
+  - "this module has too many responsibilities"        # val — shape -> judge-architecture
+  - "is this migration reversible?"                    # data -> judge-data
+  - "set up a nightly benchmark job in CI"             # val — orchestration, not judgement
+  - "what does this stack trace mean?"                 # val — diagnosis -> weigh-evidence

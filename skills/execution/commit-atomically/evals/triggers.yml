@@ -1,0 +1,44 @@
+# Trigger eval — commit-atomically
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword
+# a miss until it passes; add a held-out query instead.
+
+should:
+  - "commit this"
+  - "ok commit and push"
+  - "just commit everything, I'm done for the day"
+  - "save the work"
+  - "write a commit message for this"
+  - "what should I call this commit"
+  - "wip"
+  - "misc fixes"
+  - "fix stuff and ship it"
+  - "squash these into one commit"
+  - "this is one giant commit, split it up"
+  - "make this diff reviewable"
+  - "clean up the history before I open the PR"
+  # validation
+  - "rebase these into something sensible"
+  - "amend the last commit"
+  - "why is this commit so big"
+  - "I need to be able to revert this change on its own"
+  - "git bisect landed on this commit and the message tells me nothing"
+  - "help me stage only the auth changes, not the debug logging"
+  - "break this forty-file change into logical commits"
+  - "the PR is a mess, how do I split it"
+
+should_not:
+  - "is this ready to ship?"                      # verification -> prove-it
+  - "should we ship it behind a flag?"            # decision -> make-the-call
+  - "write the PR description"                    # message artifact -> report-with-evidence
+  - "write a handoff for the next session"        # resume point -> write-handoff
+  - "break this epic into tickets"                # planning slices -> split-by-frontier
+  - "the migration drops a column, is that safe?" # schema safety -> judge-data
+  - "why is the test failing?"                    # diagnosis -> debug-systematically
+  - "add a test for this bug"                     # authoring the change -> red-green
+  - "review this diff for security holes"         # val — review lens -> judge-risk
+  - "roll back the production deploy"             # one-way door -> make-the-call
+  - "what does this commit actually do?"          # val — reading history, not authoring a unit
+  - "show me the last ten commits"                # val — read-only query

@@ -1,0 +1,57 @@
+# Trigger eval — premortem
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Keep ~60/40 train/validation, marked per row below: do not reword a miss until it passes; add a
+# held-out query instead.
+
+should:
+  # -- train
+  - "what could go wrong here?"
+  - "we kick off the billing migration Monday — what kills it?"
+  - "premortem this launch plan"
+  - "how could this launch fail?"
+  - "play devil's advocate on the rewrite plan"
+  - "why do projects like this die?"
+  - "what am I missing before we commit to this date?"
+  - "assume it's six weeks from now and this failed — why?"
+  - "de-risk the vendor integration before we sign"
+  - "give me the risks for this launch and what we do about each"
+  - "we've picked Postgres — what could go wrong with the migration?"
+  - "what would make this project fail?"
+  - "the plan looks good, write the postmortem we'd have in six months"
+  - "before we hire, what could kill this team plan?"
+  - "what assumptions is this plan making that could be false?"
+  # -- validation
+  - "what's the failure mode if adoption is half the forecast?"
+  - "we need a pre-launch review of what could break"
+  - "what would have to be true for this to work, and what if it isn't?"
+  - "our last project like this died — make sure this one doesn't"
+  - "identify the single points of failure in this plan"
+  - "what's most likely to sink this?"
+  - "write the postmortem before we start"
+  - "how do we hedge the timeline?"
+  - "stress-test this plan before the kickoff"
+  - "the board approved the plan — what are we not seeing?"
+  - "we decided to ship behind a flag, what could go wrong with that?"
+
+should_not:
+  # -- train
+  - "should we rewrite the parser or patch it?"        # decision -> make-the-call
+  - "which database should we use?"                   # decision -> make-the-call
+  - "is this endpoint secure?"                        # security -> judge-risk
+  - "review this PR for injection holes"              # security -> judge-risk
+  - "why did last night's deploy fail?"               # diagnosis -> weigh-evidence
+  - "why do the tests pass alone and fail in CI?"     # diagnosis -> debug-systematically
+  - "split this epic into tickets"                    # structure -> split-by-frontier
+  - "write the failing test first"                    # authoring -> red-green
+  - "did the migration finish?"                       # claim -> prove-it
+  - "how should I structure this service?"            # design -> judge-architecture
+  # -- validation
+  - "what should we build first?"                     # decision -> make-the-call
+  - "is this schema change safe to run?"              # data -> judge-data
+  - "write a handoff for the next session"            # message -> write-handoff
+  - "explain what a postmortem is"                    # explanation, no plan
+  - "summarise the incident timeline"                 # report -> report-with-evidence
+  - "are we on track for the deadline?"               # status -> prove-it
+  - "what does this error mean?"                      # explanation, no plan

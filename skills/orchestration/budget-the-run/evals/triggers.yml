@@ -1,0 +1,46 @@
+# Trigger eval — budget-the-run
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0.
+#
+# Source every query from how a user actually asks about cost, time, or a run that will not end —
+# never from this skill's own vocabulary ("envelope", "projection", "threshold" do not appear in a
+# user's message and are not what the description routes on).
+#
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  - "how much is this run going to cost me"  # val
+  - "what's our token budget for this"
+  - "cap the spend at twenty bucks"  # val
+  - "keep it under $50, I don't care how"
+  - "how long is this going to take"  # val
+  - "put a time limit on the overnight run"
+  - "I need this finished before the 9am standup"
+  - "set a budget for the migration loop"  # val
+  - "give me a ceiling on this run"
+  - "how many iterations should we allow"
+  - "don't let it run all night"  # val
+  - "we burned $80 yesterday and got nowhere — how do we stop that"
+  - "it's been retrying the same test for an hour, is it worth it"
+  - "the agent keeps saying one more attempt might work"  # val
+  - "is this run going to blow past what I said I'd spend"
+  - "stop it if it's going to cost more than the task is worth"
+  - "how do I know when to pull the plug on the loop"  # val
+  - "the last run cost four times what I expected — price the next one first"
+
+should_not:
+  - "run it overnight and I'll check in the morning"        # loop mechanics -> run-autonomously
+  - "resume the run from where it died"                     # val — run-autonomously
+  - "the run is stuck, what do I do"                        # ending choice -> stop-or-escalate
+  - "should we even build this feature"                     # decision -> make-the-call
+  - "split this epic into tickets"                          # val — decomposition -> split-by-frontier
+  - "write the handoff for last night's run"                # interface -> write-handoff
+  - "why is the build failing"                              # diagnosis -> debug-systematically
+  - "is it done yet"                                        # val — verification -> prove-it
+  - "review my PR"                                          # lens work
+  - "how many tokens did that one file use"                 # a measurement, not a run
+  - "optimise the Docker image size"                        # val — execution, not orchestration
+  - "explain how the loop works"                            # documentation
+  - "how much did we spend yesterday"                       # val — a receipt -> report-with-evidence
+  - "set up a cron job that runs the script at 2am"         # val — infrastructure, no agent loop
+  - "deploy this to production now"                         # one gated action

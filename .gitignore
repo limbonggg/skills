@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Scratch
+skill-selftest-*/
+scripts/.selftest/
+
+# Local-only
+.research/
+.reference/
+docs/research/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+*.swp

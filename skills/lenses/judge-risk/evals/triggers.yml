@@ -1,0 +1,45 @@
+# Trigger eval — judge-risk
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Queries are written the way a user asks, not the way the skill is worded.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  - "is this secure?"
+  - "can I expose this endpoint to the internet?"
+  - "review this PR for security issues"
+  - "does this leak other tenants' data?"
+  - "we're adding an admin route, anything I should worry about?"  # val
+  - "is it safe to put the API key in the config file?"
+  - "someone could just change the org id in the URL, right?"  # val
+  - "security review before we ship tomorrow"
+  - "we have a pen test next week"
+  - "is this webhook handler safe?"
+  - "check the auth on this endpoint"
+  - "can a user read someone else's invoice?"
+  - "we're storing session tokens in localStorage, is that fine?"  # val
+  - "the scanner flagged something in the lockfile, do we care?"  # val
+  - "is this raw SQL safe?"
+  - "we log the full request body, is that a problem?"
+  - "adding avatar upload, what could go wrong?"  # val
+  - "is our JWT verification correct?"
+  - "does this rate limit actually protect the login?"  # val
+  - "we're putting this behind the VPN, that's enough right?"  # val
+  - "review the permissions on this new endpoint"
+  - "is it okay to disable TLS verification in the test?"  # val
+  - "what's the blast radius if this key leaks?"
+  - "this endpoint returns a customer record, does it check ownership?"  # val
+
+should_not:
+  - "why is the build failing?"                  # diagnosis -> debug-systematically
+  - "should we rewrite this module?"             # decision -> make-the-call
+  - "how should I structure this service?"       # design -> judge-architecture
+  - "split this epic into tickets"               # decomposition -> split-by-frontier
+  - "make the header font bigger"                # val — visual -> judge-taste
+  - "this endpoint is slow under load, profile it"  # val — performance -> judge-performance
+  - "add a column for the user's timezone"       # val — schema -> judge-data
+  - "write a test for the parser"                # authoring -> red-green
+  - "is the deploy green?"                       # completion claim -> prove-it
+  - "rename this function across the repo"       # val — mechanical, no boundary moved
+  - "explain how the auth flow works"            # val — explanation, no change under review
+  - "what does this error mean?"                 # diagnosis, no verdict

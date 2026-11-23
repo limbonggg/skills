@@ -1,0 +1,47 @@
+# Trigger eval — dispatch-workers
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+#
+# Source every query from how a coordinator or a user actually phrases a delegation — "delegate
+# this", "spawn agents", "the subagent came back with a wall of text" — not from the skill's own
+# vocabulary. Split roughly 60/40 train/validation: the first ten `should` queries are the
+# description's training set, the rest are held out so the description is not overfit to them.
+
+should:
+  # train
+  - "spawn a few agents, one brief each"
+  - "delegate the migration to a subagent"
+  - "have someone else do the boring part"
+  - "hand this off to a worker"
+  - "fan this out across the ticket list"
+  - "give this unit to another agent and let it come back when it's done"
+  - "the subagent came back with three pages of prose"
+  - "the worker said it was done but the tests fail"
+  - "how do I write a task for a subagent so it doesn't wander off"
+  - "I want the worker to report back in a fixed format"
+  # validation
+  - "the agent I spawned asked me a question and stopped"
+  - "the subagent edited files I told it to leave alone"
+  - "the delegation prompt keeps growing every time I retry"
+  - "what should the worker return to me"
+  - "my subagent ran out of context reading the whole plan"
+  - "I don't want to read a 400-line report from every agent"
+  - "how much of the brief does the worker actually need"
+  - "the worker's answer was 'mostly done' — what does that mean"
+  - "split these two units across two agents"
+
+should_not:
+  - "break this epic into tickets"                          # decomposition -> split-by-frontier
+  - "which ticket should I start with"                      # choice -> make-the-call
+  - "is this done?"                                         # verification -> prove-it
+  - "run it overnight and check in tomorrow"                # the loop -> run-autonomously
+  - "should we build this at all?"                          # choice -> make-the-call
+  - "review my PR"                                          # lens work, not a delegation
+  - "why is the build failing?"                             # diagnosis -> debug-systematically
+  - "two agents need to edit the same file"                 # concurrency -> parallel-safely
+  - "how much will this run cost?"                          # budget -> budget-the-run
+  - "should I stop the run?"                                # stop boundary -> stop-or-escalate
+  - "write a handoff for the next session"                  # artifact -> write-handoff
+  - "summarise what last night's run did"                   # artifact -> write-handoff
+  - "compact this conversation before we continue"          # context -> manage-context
+  - "fix this one failing test"                             # one unit, one turn: just do it

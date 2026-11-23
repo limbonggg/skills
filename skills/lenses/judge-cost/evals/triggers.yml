@@ -1,0 +1,50 @@
+# Trigger eval — judge-cost
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Queries are written the way a user asks, not the way the skill is worded.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  - "this is getting expensive to run"
+  - "the bill tripled after last week's deploy"
+  - "what does this cost per request?"
+  - "our unit economics on this endpoint don't work"
+  - "we're retrying too much, the API bill is up 4x"  # val
+  - "is this retry loop going to hammer them?"
+  - "we call the payment API once per line item, is that fine?"  # val
+  - "why does this cost so much per document?"
+  - "the agent burned 200k tokens on one task"
+  - "the agent keeps re-reading the same file every turn"
+  - "we're polling their API every second, can we stop?"  # val
+  - "should this be billed per call or batched?"
+  - "our log bill is bigger than our compute bill"
+  - "every request rebuilds the client, does that matter for cost?"  # val
+  - "we fan out to 40 lambdas per upload, what's that costing?"  # val
+  - "the queue retries the whole batch when one item fails"  # val
+  - "cross-AZ traffic is showing up on the invoice, why?"  # val
+  - "what's our cost per tenant per day?"
+  - "is this cache actually saving us money?"
+  - "we re-send the webhook after a timeout, are we paying twice?"  # val
+  - "the nightly job now scans every object in the bucket"  # val
+  - "how many calls per user action is too many?"
+  - "the run has no spend cap and it's been going for hours"  # val
+  - "does re-summarising the same context twice cost us?"
+  - "is this worth the API spend?"
+  - "estimate the monthly bill for this design"
+
+should_not:
+  - "it's an N+1, the list endpoint got slow"        # performance -> judge-performance
+  - "p99 is 900ms under load"                        # latency -> judge-performance
+  - "the frame rate drops when scrolling"            # frame budget -> judge-performance
+  - "memory keeps growing in the worker"             # memory -> judge-performance
+  - "cap this run at $20 and stop by 9am"            # val — run envelope -> budget-the-run
+  - "the loop hit its cap, do we retry or abort?"    # val — ending -> stop-or-escalate
+  - "is this feature worth building at all?"         # purchase -> make-the-call
+  - "compact the context, we're nearly full"         # boundary -> manage-context
+  - "write the handoff for tomorrow's session"       # message -> write-handoff
+  - "should this be one service or three?"           # val — shape -> judge-architecture
+  - "is this migration reversible?"                  # val — schema -> judge-data
+  - "prove the fix cut the bill"                     # val — completion claim -> prove-it
+  - "split this epic into tickets"                   # decomposition -> split-by-frontier
+  - "explain how our billing export is structured"   # val — explanation, no verdict
+  - "make the dashboard chart bigger"                # visual -> judge-taste

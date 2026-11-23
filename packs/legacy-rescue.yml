@@ -1,0 +1,27 @@
+id: legacy-rescue
+title: Legacy Rescue
+capability: Your agent changes a system nobody fully understands without breaking it, and leaves it easier to change.
+when_not: The system is greenfield, or the change is genuinely isolated. Use greenfield or ship-it.
+skills:
+  - skill: weigh-evidence
+    why: the stated cause of the bug is usually a story; test it
+  - skill: read-before-write
+    why: the first casualty in an unfamiliar codebase is a caller nobody read
+  - skill: debug-systematically
+    why: in a system nobody understands, a guessed fix is a second fault
+  - skill: frame-the-problem
+    why: "why is this expensive to change" is a different question from "what should I change"
+  - skill: judge-architecture
+    why: find the seam before adding a branch, or the branch becomes the architecture
+  - skill: judge-data
+    why: legacy schema changes are where "nobody fully understands" meets "cannot be undone"
+  - skill: split-by-frontier
+    why: the change that unblocks the most work goes first, and it is rarely the obvious one
+  - skill: red-green
+    why: characterization tests are the only thing that makes a refactor safe here
+  - skill: migrate-safely
+    why: the legacy swap that works is the one that ran both paths and compared — never the big-bang rewrite
+  - skill: prove-it
+    why: "it works locally" is the claim that ends projects
+  - skill: learn-from-correction
+    why: every surprise in this codebase is a gotcha the next session should not rediscover

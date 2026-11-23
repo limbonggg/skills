@@ -1,0 +1,46 @@
+# Trigger eval — migrate-safely
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword
+# a miss until it passes; add a held-out query instead.
+
+should:
+  - "rewrite the whole payments module against the new client"
+  - "upgrade us from webpack 4 to 5"
+  - "migrate off the old auth provider"
+  - "port this service from Flask to FastAPI"
+  - "we're swapping the ORM, can you do the conversion"                          # val
+  - "replace our hand-rolled queue with SQS"
+  - "let's do a big-bang refactor and fix the edge cases later"                  # val
+  - "get us onto React 19"
+  - "move the internal calls from REST to gRPC"
+  - "rip out the legacy XML parser"
+  - "one PR to change all the call sites"                                       # val
+  - "we need to migrate the SDK to v2"
+  - "can you convert this module to the new client"
+  - "the rewrite branch has been open for three weeks"                          # val
+  - "replace moment.js everywhere"
+  - "we're changing our internal API version, every service needs to move"       # val
+  - "how do we roll this out without breaking the mobile clients"                # val
+  - "upgrade node from 18 to 22 across the repo"
+  - "switch the payment provider integration"
+  - "deprecate the v1 code path and then remove it"
+  - "run the new implementation in parallel before we flip it"                   # val
+  - "swap the template engine"
+  - "modernise this 2014-era PHP codebase"                                      # val
+  - "we already merged the rewrite and prod is throwing"                         # val
+
+should_not:
+  - "add an index on the orders table"              # schema -> judge-data
+  - "drop the legacy_notes column"                  # data change -> judge-data
+  - "should we migrate to Postgres at all?"         # val — decision -> make-the-call
+  - "is the migration finished?"                    # claim -> prove-it
+  - "write the test first for the new client"       # ordering -> red-green
+  - "review this proto diff for breaking changes"   # val — API verdict -> judge-api
+  - "the login endpoint returns 500"                # diagnosis -> debug-systematically
+  - "split this migration into tickets"             # val — decomposition -> split-by-frontier
+  - "why is the build slow"                         # diagnosis, no change
+  - "write the release notes for this branch"       # reporting -> report-with-evidence
+  - "is this endpoint secure"                       # trust boundary -> judge-risk
+  - "explain how the old auth flow works"           # val — explanation, no change

@@ -1,0 +1,42 @@
+# Trigger eval — parallel-safely
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+#
+# Source every query from how a user describes the situation, not from this skill's vocabulary.
+# The boundary that matters: one worker (`dispatch-workers`), the loop (`run-autonomously`),
+# whether to parallelise (`make-the-call`), and the graph itself (`split-by-frontier`).
+#
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword
+# a miss until it passes; add a held-out query instead.
+
+should:
+  - "run these three tasks in parallel"
+  - "two agents will hit the same staging database"  # val
+  - "the workers share a port and keep killing each other's server"  # val
+  - "give each ticket its own worktree"
+  - "the agents clobbered each other's changes"  # val
+  - "merge the worker branches when they're done"
+  - "two agents edited the same file and now the build is broken"  # val
+  - "set up a merge queue for the parallel workers"
+  - "how do I stop the subagents stepping on each other?"
+  - "worktree per task, then merge"
+  - "the branch was green but main broke after the merge"
+  - "can I have two agents working in this repo at once?"
+  - "run these five slices concurrently"
+  - "the coordinator merged a branch that didn't pass"  # val
+  - "one agent keeps overwriting the other's edits"  # val
+  - "parallelize the migration tickets"
+
+should_not:
+  - "write the contract for one subagent"              # one worker -> dispatch-workers
+  - "should we parallelise this at all?"  # val — priced decision -> make-the-call
+  - "is the branch green?"                             # a claim -> prove-it
+  - "run the whole backlog overnight"                  # the loop -> run-autonomously
+  - "split this epic into tickets"                     # the graph -> split-by-frontier
+  - "review the diff of this PR"                       # lens work, not dispatch
+  - "resolve this merge conflict in my local branch"  # val — one tree, no parallel writer
+  - "why is the build failing?"                        # diagnosis -> debug-systematically
+  - "how much will five workers cost?"                 # budget -> budget-the-run
+  - "rebase my feature branch onto main"  # val — one branch, one writer
+  - "set up CI to run tests on every push"  # val — infrastructure, no agents
+  - "what does git worktree actually do?"  # val — a git question, no parallel work

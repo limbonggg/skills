@@ -1,0 +1,50 @@
+# Trigger eval — weigh-evidence
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Split: queries 1-14 (should) and 1-7 (should_not) are train; the rest are validation.
+
+should:
+  # -- train
+  - "why is this happening?"
+  - "I think the problem is the connection pool"
+  - "the root cause is the missing index, right?"
+  - "are you sure that's what's causing it?"
+  - "how do you know it's not the network?"
+  - "is that actually true or did you just assume it?"
+  - "the logs show no errors so it must be fine"
+  - "it works locally but fails in CI — must be the environment"
+  - "our benchmark says the new version is 30% faster"
+  - "the previous team said this module is unused"
+  - "the postmortem says the outage was caused by the retry storm"
+  - "is this regression real or a sample artifact?"       # a claim to weigh
+  - "why does this only fail for enterprise customers?"
+  - "can we assume the API is idempotent?"
+  # -- validation
+  - "everyone knows monorepos don't scale"
+  - "the A/B test won, ship it"
+  - "we've always done it this way and it's worked"
+  - "the docs say this is safe to call twice"
+  - "what's the evidence for that?"
+  - "is this a real regression or just noise?"
+  - "the metric dropped 40% overnight, what happened?"
+  - "should we trust this number?"
+  - "it only breaks under load, so it's a race condition"
+  - "prove it wrong"
+
+should_not:
+  # -- train
+  - "should we migrate to Postgres?"                    # choice -> make-the-call
+  - "is the fix deployed?"                              # completion claim -> prove-it
+  - "run the tests and tell me if they pass"            # a command, no claim to weigh
+  - "split this epic into tickets"                      # structure -> split-by-frontier
+  - "where do I even start with this rewrite?"          # framing -> frame-the-problem
+  - "write the failing test for this bug"               # authoring -> red-green
+  - "explain how our auth flow works"                   # explanation, no claim
+  # -- validation
+  - "review this PR for security issues"                # lens -> judge-risk
+  - "which database should we pick?"                    # choice -> make-the-call
+  - "make the error message friendlier"                 # a change request, no claim
+  - "summarize what changed this week"                  # report -> write-handoff
+  - "the design feels cluttered, fix the spacing"       # taste -> judge-taste
+  - "this test is flaky"                                  # test quality -> judge-tests

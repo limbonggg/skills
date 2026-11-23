@@ -1,0 +1,38 @@
+# Trigger eval — prove-it
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+
+should:
+  - "ok that's done then, thanks"  # val
+  - "is it working now?"
+  - "are you sure that fixed it?"
+  - "did you run the tests?"  # val
+  - "can I deploy this?"
+  - "just push it, it should be fine"
+  - "did the run actually finish?"  # val
+  - "so we're good?"
+  - "the build passes right?"
+  - "everything green?"  # val
+  - "has that been verified?"
+  - "give me a summary of what changed and whether it works"
+  - "can I tell the customer it's fixed?"  # val
+  - "is the migration applied?"
+  - "does the endpoint return the new field now?"
+  - "you tested this, right?"  # val
+  - "let me know when it's ready to ship"
+  - "confirm the bug is gone"  # val
+  - "check it actually runs"
+  - "did the worker finish?"  # val
+
+should_not:
+  - "why is the build failing?"            # diagnosis -> debug-systematically
+  - "should we rewrite this module?"       # val — decision -> make-the-call
+  - "how should I structure this service?" # design -> judge-architecture
+  - "split this epic into tickets"         # decomposition -> split-by-frontier
+  - "write a test for this function"       # val — authoring -> red-green
+  - "what does this error mean?"           # explanation, no claim
+  - "status?"                          # val — report request -> report-with-evidence
+  - "explain how the auth flow works"      # val — explanation, no claim
+  - "make the header font bigger"          # change request, no claim

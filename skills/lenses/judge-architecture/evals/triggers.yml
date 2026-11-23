@@ -1,0 +1,49 @@
+# Trigger eval — judge-architecture
+# Protocol: 20+ labelled queries, 3 runs each. A `should` query passes at trigger rate >= 0.5.
+# A `should_not` query passes at trigger rate 0. A human reads every flagged miss.
+# Source each query from how a user actually phrases the problem, not from the skill's own wording.
+# Split: `# val` marks the held-out validation split (~40%); unmarked rows are train. Do not reword a miss until it passes; add a held-out query instead.
+# The should_not list is deliberately weighted towards near-misses: a review request, a perf question,
+# and a "should we build it" question all look like shape questions from a distance.
+
+should:
+  - "should this be its own module?"
+  - "where should this live — the service or the client?"
+  - "is this abstraction actually worth it?"
+  - "we keep touching the same five files for every feature"  # val
+  - "this class is 2,000 lines, should we split it?"
+  - "review this PR — does the new layer make sense?"
+  - "extract a shared helper for these two functions?"
+  - "the change is six files for a one-line feature, is that normal?"  # val
+  - "would you put the retry logic in the client or in the caller?"  # val
+  - "we put a repository layer over the ORM, is that right?"
+  - "should the parser and the validator be one module or two?"
+  - "every module here just passes through to the next one"  # val
+  - "how do we decide the boundary between these two services?"  # val
+  - "is this dependency injection overkill?"
+  - "why is everything in this codebase hard to change?"
+  - "make this generic so we can add formats later?"
+  - "review the shape of this refactor before I start"  # val
+  - "the interface has nine parameters now, is that a problem?"  # val
+  - "do we need a facade here, or is it ceremony?"
+  - "should the CLI and the HTTP handler share this code?"  # val
+  - "this helper has exactly one caller — keep it?"
+  - "design review: is this the right seam for the payment provider?"  # val
+  - "our services and repositories are 1:1, is that fine?"
+  - "the module is deep but nobody can use it without reading the source"  # val
+
+should_not:
+  - "find the bug in this function"                     # correctness -> a code review, not a lens
+  - "why is the build failing on CI?"                   # diagnosis -> debug-systematically
+  - "is the fix actually deployed?"                     # claim -> prove-it
+  - "rename this variable to something clearer"         # mechanical edit, no verdict
+  - "add a loading spinner to the settings page"        # val — UI change -> judge-taste
+  - "is this endpoint safe from SQL injection?"         # val — trust boundary -> judge-risk
+  - "this endpoint is slow, why?"                       # val — measurement -> judge-performance
+  - "should we build this feature at all?"              # worth -> make-the-call
+  - "write a failing test for the retry logic"          # authoring -> red-green
+  - "break this epic into tickets"                      # structure -> split-by-frontier
+  - "describe the architecture of this repo"            # val — description, no verdict to emit
+  - "which database should we use?"                     # val — choice -> make-the-call
+  - "make the tests pass"                               # execution
+  - "what is a monad?"                                  # explanation, nothing to judge

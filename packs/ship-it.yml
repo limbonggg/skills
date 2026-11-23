@@ -1,0 +1,27 @@
+id: ship-it
+title: Ship It
+capability: Your agent gets a decided change into production without lying about whether it works.
+when_not: The decision itself is still open. Use make-the-call first; shipping an undecided change moves the argument into production.
+skills:
+  - skill: make-the-call
+    why: name the remaining unknowns and accept them explicitly, or stop
+  - skill: split-by-frontier
+    why: ship the slice that de-risks the most, not the slice that is finished
+  - skill: red-green
+    why: the last change before production is the one most tempting to leave untested
+  - skill: prove-it
+    why: the evidence gate is the whole skill; everything else is process around it
+  - skill: judge-risk
+    why: what this change exposes is not the same as whether it works
+  - skill: judge-data
+    why: the migration that locks the table at 2am is a ship-gate question, not a review nicety
+  - skill: judge-api
+    why: a break shipped silently is the one defect no rollback fully undoes — clients already bound
+  - skill: commit-atomically
+    why: the diff that can't be reverted alone is the diff that can't be trusted alone
+  - skill: migrate-safely
+    why: a migration shipped big-bang is a rollback you will need and won't have
+  - skill: report-with-evidence
+    why: the release note is a claim, and claims have a format
+  - skill: write-handoff
+    why: whoever is on call at 3am did not read your session

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Run Autonomously"
+  short_description: "Run a long task unattended on a disk-backed loop with a byte-exact ending."
+policy:
+  allow_implicit_invocation: false
